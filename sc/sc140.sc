@@ -61,7 +61,20 @@ play{x=165;b=SinOsc;p=Trig.ar(Saw.ar(x),1);y=b.ar(p*x);z=b.ar(p);(GVerb.ar(Grain
 
 13
 Batuhan Bozkurt
-play{LeakDC.ar(BRF.ar(Saw.ar(8,Decay2.kr(x=Duty.kr(1/8,0,Drand([0,Drand((0.4,0.5..1))],inf)),0.01,0.3))**1.5,x*20+[45.1,45],0.1)).tanh}//#sc
+play{LeakDC.ar(
+		BRF.ar(
+			Saw.ar(
+				8,
+				Decay2.kr(
+					x=Duty.kr(1/8,0,Drand([0,Drand((0.4,0.5..1))],inf)),
+					0.01,
+					0.3
+				)
+			)**1.5,
+			x*20+[45.1,45],
+			0.1
+		)
+	).tanh}//#sc
 
 14
 Nathaniel Virgo
@@ -73,7 +86,13 @@ Jason Dixon
 
 16
 Batuhan Bozkurt
-play{AllpassC.ar(SinOsc.ar(55).tanh,0.4,TExpRand.ar(2e-4, 0.4,Impulse.ar(8)).round([2e-3,4e-3]),2)};// #supercollider with bass please...
+play{
+	AllpassC.ar(
+		SinOsc.ar(55).tanh,
+		0.4,
+		TExpRand.ar(2e-4, 0.4,Impulse.ar(8)).round([2e-3,4e-3]),
+		2)
+};// #supercollider with bass please...
 
 17
 redFrik

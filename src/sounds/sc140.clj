@@ -11,9 +11,50 @@
                   (out 0 (pan2 a))))]
     (synth)))
 
-(defn lf-saw02 []
-  (let [synth (defsynth s []
-                (let [s (* (env-gen:kr (envelope [1 1 0] [120 10]) 1 1 0 1 FREE)
-                           (ringz (impulse [2 1 4] [0.1 0.11 0.12]) [0.1 0.1 0.5]))]
-                  (out 0 (pan2 s))))]
-    (synth)))
+(defsynth bozkurt13 [dur 1/8 freq 8]
+  (let [
+        r (drand [0 (drand (range 4/10 1 1/10))] INF)
+        x (duty:kr dur 0 r)
+        d (decay2 x 0.01 0.3)
+        ;;s (pow (* d (saw freq)) 1.5)
+        s (pow (* d (saw freq)) 1.5)
+        f (brf s (+ (* 20 x) [45.1 45]) 0.1)]
+    (out 0
+         (tanh (leak-dc f)))))
+
+
+(defsynth boz-drum []
+  (let [
+        r (drand [(drand (range 4/10 1 1/10))])
+        x (duty:kr 1 0 r :action FREE)
+        d (decay2 x 0.01 0.3)
+        s (pow (* d (saw 8)) 1.5)
+        f (brf s (+ (* 20 x) [45.1 45]) 0.1)]
+    (out 0
+         (tanh (leak-dc f)))))
+
+(defsynth mousefm []
+  (out 0 (pan2 (sin-osc (* (mouse-y 0 500) (sin-osc (mouse-x 0 2000)))))))
+
+(defsynth bozkurt16 [rate 8]
+  (out 0 (allpass-c (cosh (sin-osc 55))
+                    0.4
+                    (round (t-exp-rand 0.0002
+                                       0.4
+                                       (impulse:ar rate)) [0.003 0.004])
+                    2)))
+
+(demo (* (env-gen:ar (adsr 0.001 0.8 1 1) (dust:ar 1))
+         (sin-osc 999)))
+
+(demo 2
+      (let [trig (impulse:kr 18)
+            freqs (dseq [440 880 220] INF)
+            note-gen (demand:kr trig 0 freqs)
+            src (sin-osc note-gen)]
+        (* [0.1 0.1] src)))
+
+(demo
+ (pan2 (clip2 (* (env-gen (perc) :action FREE)
+                  (tanh (sin-osc 60)))
+               0.5)))
